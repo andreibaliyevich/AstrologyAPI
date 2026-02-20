@@ -6,9 +6,9 @@ from app.utils.logging_system import logger
 
 
 app = FastAPI(
-    title="Astro Service",
-    description="Backend for the Astro Service",
-    version="0.1.0",
+    title="Astrology API",
+    description="Natal Chart & Compatibility Calculation Service",
+    version="1.0.0",
 )
 
 app.add_middleware(

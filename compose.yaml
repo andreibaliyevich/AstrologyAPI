@@ -1,6 +1,6 @@
 services:
   backend:
-    container_name: astro-backend
+    container_name: astrology-backend
     restart: unless-stopped
     build:
       context: ./backend/
