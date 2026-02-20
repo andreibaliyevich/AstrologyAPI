@@ -2,6 +2,7 @@ from typing import Annotated
 from fastapi import APIRouter, Body
 from app.schemas.birth import BirthInfo
 from app.schemas.chart import NatalChart
+from app.schemas.compatibility import CompatibilityCharts, CompatibilityInfo
 from app.services.chart import ChartService
 
 
@@ -17,3 +18,11 @@ async def chart_build(
 ) -> NatalChart:
     service = ChartService()
     return await service.build_chart(data=body_data)
+
+
+@router.post("/compare", response_model=CompatibilityInfo)
+async def charts_compare(
+    body_data: Annotated[CompatibilityCharts, Body()],
+) -> CompatibilityInfo:
+    service = ChartService()
+    return await service.compare_charts(data=body_data)
