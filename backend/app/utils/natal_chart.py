@@ -68,9 +68,9 @@ def calculate_houses(
     jd: float,
     lat: float,
     lon: float,
-) -> tuple[list[float], float]:
+) -> tuple[list[float], float, float]:
     """
-    Calculate house cusps and ascendant using Placidus system.
+    Calculate house cusps, ascendant and midheaven using Placidus system.
 
     :param jd: Julian Day in Universal Time.
     :type jd: float
@@ -82,14 +82,18 @@ def calculate_houses(
     :type lon: float
 
     :returns: Tuple containing:
-              - List of 12 house cusp longitudes
               - Ascendant longitude
-    :rtype: tuple[list[float], float]
+              - Midheaven longitude
+              - List of 12 house cusp longitudes
+    :rtype: tuple[list[float], float, float]
     """
     houses, ascmc = swe.houses(jd, lat, lon, HOUSE_SYSTEM)
+
     houses = [normalize_angle(h) for h in houses]
     ascendant = normalize_angle(ascmc[0])
-    return houses, ascendant
+    midheaven = normalize_angle(ascmc[1])
+
+    return houses, ascendant, midheaven
 
 
 def assign_houses(planets: dict[str, PlanetPosition], houses: list[float]) -> None:
@@ -187,14 +191,15 @@ def build_natal_chart(
     jd = calculate_julian_day(dt)
 
     planets = calculate_planets(jd)
-    houses, ascendant = calculate_houses(jd, latitude, longitude)
+    houses, ascendant, midheaven = calculate_houses(jd, latitude, longitude)
 
     assign_houses(planets, houses)
     aspects = calculate_aspects(planets)
 
     return NatalChart(
-        planets=planets,
         ascendant=ascendant,
+        midheaven=midheaven,
+        planets=planets,
         houses=houses,
         aspects=aspects,
     )
