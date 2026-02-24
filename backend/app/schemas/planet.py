@@ -6,4 +6,5 @@ class PlanetPosition(BaseModel):
     longitude: float
     sign: str
     degree_in_sign: float
+    is_retrograde: bool
     house: int | None

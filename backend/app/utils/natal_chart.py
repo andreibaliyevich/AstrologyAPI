@@ -51,6 +51,9 @@ def calculate_planets(jd: float) -> dict[str, PlanetPosition]:
         pos = swe.calc_ut(jd, code)[0]
         longitude = normalize_angle(pos[0])
 
+        speed = pos[3]
+        is_retrograde = speed < 0
+
         sign, degree = get_sign(longitude)
 
         planets[name] = PlanetPosition(
@@ -58,6 +61,7 @@ def calculate_planets(jd: float) -> dict[str, PlanetPosition]:
             longitude=longitude,
             sign=sign,
             degree_in_sign=degree,
+            is_retrograde=is_retrograde,
             house=None,
         )
 
