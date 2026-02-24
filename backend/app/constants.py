@@ -37,3 +37,15 @@ ZODIAC_SIGNS = [
     "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
     "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"
 ]
+
+HARMONIOUS = {"trine", "sextile"}
+CHALLENGING = {"square", "opposition"}
+NEUTRAL = {"conjunction"}
+
+BLOCK_WEIGHTS = {
+    "romantic": 0.30,
+    "emotional": 0.25,
+    "mental": 0.15,
+    "sexual": 0.15,
+    "stability": 0.15,
+}
