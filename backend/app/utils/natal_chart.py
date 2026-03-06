@@ -35,17 +35,17 @@ from app.constants import (
 )
 
 
-def calculate_planets(jd: float) -> dict[str, PlanetPosition]:
+def calculate_planets(jd: float) -> list[PlanetPosition]:
     """
     Calculate planetary longitudes for a given Julian Day.
 
     :param jd: Julian Day in Universal Time.
     :type jd: float
 
-    :returns: Dictionary of planetary positions keyed by planet name.
-    :rtype: dict[str, PlanetPosition]
+    :returns: List of planetary positions.
+    :rtype: list[PlanetPosition]
     """
-    planets = {}
+    planets: list[PlanetPosition] = []
 
     for name, code in PLANETS.items():
         pos = swe.calc_ut(jd, code)[0]
@@ -56,14 +56,14 @@ def calculate_planets(jd: float) -> dict[str, PlanetPosition]:
 
         sign, degree = get_sign(longitude)
 
-        planets[name] = PlanetPosition(
+        planets.append(PlanetPosition(
             name=name,
             longitude=longitude,
             sign=sign,
             degree_in_sign=degree,
             is_retrograde=is_retrograde,
             house=None,
-        )
+        ))
 
     return planets
 
@@ -100,54 +100,52 @@ def calculate_houses(
     return houses, ascendant, midheaven
 
 
-def assign_houses(planets: dict[str, PlanetPosition], houses: list[float]) -> None:
+def assign_houses(planets: list[PlanetPosition], houses: list[float]) -> None:
     """
     Assign house numbers to planetary positions.
 
-    :param planets: Dictionary of planetary positions.
-    :type planets: dict[str, PlanetPosition]
+    :param planets: List of planetary positions.
+    :type planets: list[PlanetPosition]
 
     :param houses: List of house cusp longitudes.
     :type houses: list[float]
     """
-    for planet in planets.values():
+    for planet in planets:
         planet.house = determine_house(planet.longitude, houses)
 
 
-def calculate_aspects(planets: dict[str, PlanetPosition]) -> list[Aspect]:
+def calculate_aspects(planets: list[PlanetPosition]) -> list[Aspect]:
     """
     Detect aspects between planets within a single natal chart.
 
     Aspects are determined based on predefined aspect angles
     and allowed orb values.
 
-    :param planets: Dictionary of planetary positions.
-    :type planets: dict[str, PlanetPosition]
+    :param planets: List of planetary positions.
+    :type planets: list[PlanetPosition]
 
     :returns: List of detected aspects.
     :rtype: list[Aspect]
     """
-    aspects = []
-    names = list(planets.keys())
+    aspects: list[Aspect] = []
 
-    for i in range(len(names)):
-        for j in range(i + 1, len(names)):
-            p1 = planets[names[i]]
-            p2 = planets[names[j]]
+    for i in range(len(planets)):
+        for j in range(i + 1, len(planets)):
+            p1 = planets[i]
+            p2 = planets[j]
 
             diff = angle_difference(p1.longitude, p2.longitude)
 
             for aspect_name, angle in ASPECT_ANGLES.items():
                 orb = abs(diff - angle)
+
                 if orb <= ORBIS[aspect_name]:
-                    aspects.append(
-                        Aspect(
-                            planet1=p1.name,
-                            planet2=p2.name,
-                            aspect_type=aspect_name,
-                            orb=round(orb, 2),
-                        )
-                    )
+                    aspects.append(Aspect(
+                        planet1=p1.name,
+                        planet2=p2.name,
+                        aspect_type=aspect_name,
+                        orb=round(orb, 2),
+                    ))
 
     return aspects
 
@@ -203,7 +201,18 @@ def build_natal_chart(
     return NatalChart(
         ascendant=ascendant,
         midheaven=midheaven,
+        house1=houses[0],
+        house2=houses[1],
+        house3=houses[2],
+        house4=houses[3],
+        house5=houses[4],
+        house6=houses[5],
+        house7=houses[6],
+        house8=houses[7],
+        house9=houses[8],
+        house10=houses[9],
+        house11=houses[10],
+        house12=houses[11],
         planets=planets,
-        houses=houses,
         aspects=aspects,
     )

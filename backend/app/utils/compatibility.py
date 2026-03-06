@@ -75,8 +75,8 @@ def calculate_synastry_aspects(
     """
     results = []
 
-    for p1 in chart1.planets.values():
-        for p2 in chart2.planets.values():
+    for p1 in chart1.planets:
+        for p2 in chart2.planets:
 
             diff = angle_difference(p1.longitude, p2.longitude)
 
@@ -85,15 +85,14 @@ def calculate_synastry_aspects(
                 max_orb = ORBIS[aspect_name]
 
                 if orb <= max_orb:
-                    results.append(
-                        (
-                            p1.name,
-                            p2.name,
-                            aspect_name,
-                            orb,
-                            max_orb,
-                        )
-                    )
+                    results.append((
+                        p1.name,
+                        p2.name,
+                        aspect_name,
+                        orb,
+                        max_orb,
+                    ))
+
     return results
 
 
@@ -159,19 +158,19 @@ def compare_charts(
 
         pair = {p1, p2}
 
-        if pair <= {"Venus", "Mars"} or pair == {"Venus"}:
+        if pair <= {"venus", "mars"} or pair == {"venus"}:
             blocks["romantic"].append(a)
 
-        if pair <= {"Moon", "Sun"} or pair == {"Moon"}:
+        if pair <= {"moon", "sun"} or pair == {"moon"}:
             blocks["emotional"].append(a)
 
-        if pair <= {"Mercury", "Sun"} or pair == {"Mercury"}:
+        if pair <= {"mercury", "sun"} or pair == {"mercury"}:
             blocks["mental"].append(a)
 
-        if pair <= {"Mars", "Venus"} or pair == {"Mars"}:
+        if pair <= {"mars", "venus"} or pair == {"mars"}:
             blocks["sexual"].append(a)
 
-        if "Saturn" in pair:
+        if "saturn" in pair:
             blocks["stability"].append(a)
 
     scores = {}

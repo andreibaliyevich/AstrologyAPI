@@ -6,6 +6,19 @@ from app.schemas.planet import PlanetPosition
 class NatalChart(BaseModel):
     ascendant: float
     midheaven: float
-    planets: dict[str, PlanetPosition] = Field(default_factory=dict)
-    houses: list[float] = Field(default_factory=list)
+
+    house1: float
+    house2: float
+    house3: float
+    house4: float
+    house5: float
+    house6: float
+    house7: float
+    house8: float
+    house9: float
+    house10: float
+    house11: float
+    house12: float
+
+    planets: list[PlanetPosition] = Field(default_factory=list)
     aspects: list[Aspect] = Field(default_factory=list)
