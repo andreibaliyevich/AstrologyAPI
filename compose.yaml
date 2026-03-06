@@ -15,3 +15,9 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
+    networks:
+      - shared_network
+
+networks:
+  shared_network:
+    external: true
