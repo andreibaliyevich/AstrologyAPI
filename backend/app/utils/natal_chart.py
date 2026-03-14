@@ -153,9 +153,9 @@ def calculate_aspects(planets: list[PlanetPosition]) -> list[Aspect]:
 
 def build_natal_chart(
     date_time: datetime,
+    time_zone: str,
     latitude: float,
     longitude: float,
-    time_zone: str,
 ) -> NatalChart:
     """
     Build a natal chart based on birth data.
@@ -166,14 +166,14 @@ def build_natal_chart(
     :param date_time: Local birth date and time (naive or timezone-aware).
     :type date_time: datetime
 
+    :param time_zone: IANA timezone name (e.g. "Europe/London").
+    :type time_zone: str
+
     :param latitude: Geographic latitude of birth location.
     :type latitude: float
 
     :param longitude: Geographic longitude of birth location.
     :type longitude: float
-
-    :param time_zone: IANA timezone name (e.g. "Europe/London").
-    :type time_zone: str
 
     :returns: Fully calculated natal chart model.
     :rtype: NatalChart

@@ -8,9 +8,9 @@ class ChartService:
     async def build_chart(self, data: BirthInfo):
         return build_natal_chart(
             date_time=data.date_time,
+            time_zone=data.time_zone,
             latitude=data.latitude,
             longitude=data.longitude,
-            time_zone=data.time_zone,
         )
 
     async def compare_charts(self, data: CompatibilityCharts):
