@@ -13,8 +13,9 @@ It includes:
 - Main entry function for chart construction
 """
 
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
 import swisseph as swe
 from app.schemas.aspect import Aspect
 from app.schemas.chart import NatalChart
@@ -151,10 +152,10 @@ def calculate_aspects(planets: list[PlanetPosition]) -> list[Aspect]:
 
 
 def build_natal_chart(
-    dt: datetime,
+    date_time: datetime,
     latitude: float,
     longitude: float,
-    tz_offset_hours: float,
+    time_zone: str,
 ) -> NatalChart:
     """
     Build a natal chart based on birth data.
@@ -162,8 +163,8 @@ def build_natal_chart(
     This function calculates planetary positions, house cusps,
     ascendant, and aspects for a given birth moment and location.
 
-    :param dt: Local birth date and time (naive or timezone-aware).
-    :type dt: datetime
+    :param date_time: Local birth date and time (naive or timezone-aware).
+    :type date_time: datetime
 
     :param latitude: Geographic latitude of birth location.
     :type latitude: float
@@ -171,9 +172,8 @@ def build_natal_chart(
     :param longitude: Geographic longitude of birth location.
     :type longitude: float
 
-    :param tz_offset_hours: Timezone offset from UTC in hours.
-                            Example: +3 for UTC+3, -5 for UTC-5.
-    :type tz_offset_hours: float
+    :param time_zone: IANA timezone name (e.g. "Europe/London").
+    :type time_zone: str
 
     :returns: Fully calculated natal chart model.
     :rtype: NatalChart
@@ -183,14 +183,14 @@ def build_natal_chart(
     if ephe_path.is_dir():
         swe.set_ephe_path(EPHE_FOLDER)
 
-    tz = timezone(timedelta(hours=tz_offset_hours))
+    tz = ZoneInfo(time_zone)
 
-    if dt.tzinfo is None:
-        dt = dt.replace(tzinfo=tz)
+    if date_time.tzinfo is None:
+        date_time = date_time.replace(tzinfo=tz)
     else:
-        dt = dt.astimezone(tz)
+        date_time = date_time.astimezone(tz)
 
-    jd = calculate_julian_day(dt)
+    jd = calculate_julian_day(date_time)
 
     planets = calculate_planets(jd)
     houses, ascendant, midheaven = calculate_houses(jd, latitude, longitude)

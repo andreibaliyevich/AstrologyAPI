@@ -7,11 +7,11 @@ from app.utils.compatibility import compare_charts
 class ChartService:
     async def build_chart(self, data: BirthInfo):
         return build_natal_chart(
-            dt=data.date_time,
+            date_time=data.date_time,
             latitude=data.latitude,
             longitude=data.longitude,
-            tz_offset_hours=data.tz_offset_hours,
+            time_zone=data.time_zone,
         )
 
     async def compare_charts(self, data: CompatibilityCharts):
-        return compare_charts(data.chart1, data.chart2)
+        return compare_charts(chart1=data.chart1, chart2=data.chart2)

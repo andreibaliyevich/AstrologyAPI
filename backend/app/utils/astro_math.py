@@ -14,7 +14,7 @@ These functions do not depend on business logic and can be reused
 independently of natal chart or compatibility calculations.
 """
 
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 import swisseph as swe
 from app.constants import ZODIAC_SIGNS
 
@@ -107,7 +107,7 @@ def calculate_julian_day(dt: datetime) -> float:
     if dt.tzinfo is None:
         raise ValueError("Datetime must be timezone-aware")
 
-    dt_utc = dt.astimezone(timezone.utc)
+    dt_utc = dt.astimezone(UTC)
     return swe.julday(
         dt_utc.year,
         dt_utc.month,
